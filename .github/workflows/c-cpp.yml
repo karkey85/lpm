@@ -1,0 +1,23 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Install dependencies
+      run: sudo apt-get update && sudo apt-get install -y g++ make cmake
+
+    - name: Build using g++
+      run: g++ -fsanitize=address -fno-omit-frame-pointer -g -O1 main.cpp route_tracker.cpp patricia.cxx route_tracker.h patricia.h -lpthread -lm -o route_tracker
+
+    - name: Run program
+      run: ./route_tracker
